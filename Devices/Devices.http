@@ -1,0 +1,11 @@
+@Devices_HostAddress = http://localhost:5258
+
+GET {{Devices_HostAddress}}/todos/
+Accept: application/json
+
+###
+
+GET {{Devices_HostAddress}}/todos/1
+Accept: application/json
+
+###
