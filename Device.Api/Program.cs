@@ -22,17 +22,25 @@ builder.Services.AddScoped<IDeviceService, DeviceService>();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(); 
-}
 
-try {
+app.UseSwagger();
+app.UseSwaggerUI();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider
+        .GetRequiredService<DeviceDbContext>();
+
+    dbContext.Database.Migrate();
+}
+try
+{
     app.MapControllers();
-} catch (ReflectionTypeLoadException ex) {
+}
+catch (ReflectionTypeLoadException ex)
+{
     Console.WriteLine(ex.Message);
-    foreach(var le in ex.LoaderExceptions) Console.WriteLine(le.GetType().FullName + ": " + le.Message);
+    foreach (var le in ex.LoaderExceptions) Console.WriteLine(le.GetType().FullName + ": " + le.Message);
     throw;
 }
 
