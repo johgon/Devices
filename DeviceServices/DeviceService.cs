@@ -16,6 +16,11 @@ namespace DeviceServices
         {
             _repo = repo;
         }
+
+        public DeviceService()
+        {
+        }
+
         private DeviceBO GenerateBO(Devicedb d)
         {
             return new DeviceBO
@@ -62,7 +67,11 @@ namespace DeviceServices
                 if (devicedb.State == (int)DeviceState.InUse)
                 {
                     devicedb.State = (int)device.State;
-                }
+                    if (devicedb.Name != device.Name || devicedb.Brand != device.Brand)
+                    {
+                        throw new InvalidOperationException("Cannot change the name or brand of a device that is in use.");
+                    }
+                }                
                 else
                 {
                     devicedb.Name = device.Name;
