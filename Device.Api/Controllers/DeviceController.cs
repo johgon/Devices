@@ -12,7 +12,7 @@ namespace Device.Api.Controllers
     {
         private readonly IDeviceService _service;
 
-        public DeviceController(DeviceService service)
+        public DeviceController(IDeviceService service)
         {
             _service = service;
         }

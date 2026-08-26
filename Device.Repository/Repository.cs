@@ -27,7 +27,19 @@ namespace Device.Repository
 
         public T AddOrUpdate(T entity, int? id)
         {
-            _context.Entry(entity).State = EntityState.Modified;
+            if (id == null)
+            {
+                _context.Add(entity);
+            }
+            else
+            {
+                var existingEntity = GetById(id.Value);
+                if (existingEntity == null)
+                {
+                    throw new ArgumentException($"Entity with id {id} not found.");
+                }
+                _context.Entry(entity).State = EntityState.Modified;
+            }
             _context.SaveChanges();
             return entity;
         }
